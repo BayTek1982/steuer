@@ -1,0 +1,212 @@
+/* Layout: Schrittleiste links, Formular in der Mitte, Ergebnis rechts fest im Blick. */
+:root {
+  --grund: #f2f5f6;
+  --flaeche: #ffffff;
+  --linie: #d5dde0;
+  --text: #14252b;
+  --text-leise: #56686f;
+  --akzent: #0b6b78;
+  --akzent-text: #ffffff;
+  --akzent-sanft: #e0eff1;
+  --gut: #1b7a43;
+  --gut-sanft: #e1f3e8;
+  --schlecht: #b3352b;
+  --schlecht-sanft: #fae6e3;
+  --schrift-titel: "Sora", "Segoe UI", system-ui, sans-serif;
+  --schrift: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --grund: #0d181c;
+    --flaeche: #152328;
+    --linie: #2a3d44;
+    --text: #e6eff1;
+    --text-leise: #9bb0b7;
+    --akzent: #4fc3d1;
+    --akzent-text: #06262b;
+    --akzent-sanft: #17363c;
+    --gut: #5fd08c;
+    --gut-sanft: #153426;
+    --schlecht: #f08a7f;
+    --schlecht-sanft: #3d1f1c;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --grund: #0d181c;
+  --flaeche: #152328;
+  --linie: #2a3d44;
+  --text: #e6eff1;
+  --text-leise: #9bb0b7;
+  --akzent: #4fc3d1;
+  --akzent-text: #06262b;
+  --akzent-sanft: #17363c;
+  --gut: #5fd08c;
+  --gut-sanft: #153426;
+  --schlecht: #f08a7f;
+  --schlecht-sanft: #3d1f1c;
+}
+
+* { box-sizing: border-box; }
+html { font-size: 16px; }
+body {
+  margin: 0;
+  background: var(--grund);
+  color: var(--text);
+  font-family: var(--schrift);
+  line-height: 1.5;
+}
+h1, h2, h3 { font-family: var(--schrift-titel); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: 1.6rem; }
+h2 { font-size: 1.15rem; }
+p { margin: 0; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--akzent); outline-offset: 2px; }
+
+.kopf {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+  padding: 14px 20px; background: var(--flaeche); border-bottom: 1px solid var(--linie);
+}
+.marke { display: flex; gap: 12px; align-items: center; color: var(--akzent); }
+.marke strong { display: block; font-family: var(--schrift-titel); font-size: 1.1rem; color: var(--text); }
+.marke span { font-size: 0.85rem; color: var(--text-leise); }
+.aktionen { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.knopf {
+  font: inherit; font-weight: 500; cursor: pointer; text-decoration: none;
+  padding: 9px 16px; border-radius: 8px;
+  border: 1px solid var(--akzent); background: var(--akzent); color: var(--akzent-text);
+}
+.knopf:hover { filter: brightness(1.08); }
+.knopf.leise { background: transparent; color: var(--text); border-color: var(--linie); }
+.knopf.leise:hover { border-color: var(--akzent); color: var(--akzent); filter: none; }
+.knopf.gefahr { background: var(--schlecht); border-color: var(--schlecht); color: var(--flaeche); }
+.knopf.klein { padding: 5px 12px; font-size: 0.9rem; }
+
+.hinweisband {
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center;
+  padding: 8px 20px; background: var(--akzent-sanft); font-size: 0.92rem;
+}
+
+.gitter {
+  display: grid; gap: 24px; align-items: start;
+  grid-template-columns: 220px minmax(0, 1fr) 300px;
+  max-width: 1240px; margin: 0 auto; padding: 24px 20px;
+}
+
+.schritte { display: flex; flex-direction: column; gap: 4px; position: sticky; top: 16px; }
+.schritte a {
+  display: flex; gap: 10px; align-items: center;
+  padding: 9px 12px; border-radius: 8px; text-decoration: none; color: var(--text-leise); font-weight: 500;
+}
+.schritte a:hover { background: var(--akzent-sanft); color: var(--text); }
+.schritte a[aria-current="step"] { background: var(--akzent); color: var(--akzent-text); }
+.schritte .nr {
+  flex: none; width: 24px; height: 24px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 0.8rem;
+  border: 1.5px solid currentColor; font-variant-numeric: tabular-nums;
+}
+
+main { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.einleitung { color: var(--text-leise); max-width: 65ch; }
+.karte {
+  background: var(--flaeche); border: 1px solid var(--linie); border-radius: 12px;
+  padding: 20px; display: flex; flex-direction: column; gap: 16px;
+}
+.felder { display: grid; gap: 16px 20px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.feld { display: flex; flex-direction: column; gap: 5px; }
+.feld label { font-weight: 500; font-size: 0.95rem; }
+.feld small { color: var(--text-leise); font-size: 0.82rem; }
+.eingabe { position: relative; display: flex; }
+.eingabe input, .feld select, textarea {
+  width: 100%; font: inherit; color: var(--text); background: var(--grund);
+  border: 1px solid var(--linie); border-radius: 8px; padding: 9px 12px;
+  font-variant-numeric: tabular-nums;
+}
+.eingabe input { text-align: right; padding-right: 44px; }
+.eingabe input.text { text-align: left; padding-right: 12px; }
+.eingabe .einheit {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--text-leise); font-size: 0.85rem; pointer-events: none;
+}
+.eingabe input:focus, .feld select:focus, textarea:focus { outline: 2px solid var(--akzent); outline-offset: 0; border-color: var(--akzent); }
+.liste { display: flex; flex-direction: column; gap: 12px; }
+.listenzeile {
+  display: grid; gap: 10px 14px; align-items: end;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  padding-bottom: 12px; border-bottom: 1px solid var(--linie);
+}
+.listenzeile .feld.breit { grid-column: span 2; }
+.listenzeile .feld label { font-size: 0.8rem; color: var(--text-leise); font-weight: 400; }
+.listenzeile .knopf { justify-self: start; }
+@media (max-width: 420px) { .listenzeile .feld.breit { grid-column: auto; } }
+.feld.haken { flex-direction: row; align-items: flex-start; gap: 10px; }
+.feld.haken input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--akzent); flex: none; }
+.feld.haken div { display: flex; flex-direction: column; gap: 2px; }
+.zwischensumme {
+  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  padding: 10px 14px; border-radius: 8px; background: var(--akzent-sanft); font-size: 0.95rem;
+}
+.zwischensumme b { font-variant-numeric: tabular-nums; }
+.weiter { display: flex; justify-content: space-between; gap: 12px; }
+
+.ergebnis {
+  position: sticky; top: 16px;
+  background: var(--flaeche); border: 1px solid var(--linie); border-radius: 12px;
+  padding: 20px; display: flex; flex-direction: column; gap: 14px;
+}
+.ergebnis .etikett { font-size: 0.85rem; color: var(--text-leise); }
+.betrag { font-family: var(--schrift-titel); font-size: 2rem; font-variant-numeric: tabular-nums; line-height: 1.1; overflow-wrap: anywhere; }
+.pille { align-self: flex-start; padding: 3px 10px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; }
+.gut .betrag { color: var(--gut); }
+.gut .pille { background: var(--gut-sanft); color: var(--gut); }
+.schlecht .betrag { color: var(--schlecht); }
+.schlecht .pille { background: var(--schlecht-sanft); color: var(--schlecht); }
+.neutral .pille { background: var(--akzent-sanft); color: var(--text-leise); }
+.kurz { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; font-size: 0.92rem; margin: 0; }
+.kurz dt { color: var(--text-leise); }
+.kurz dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+
+.tabellenrahmen { overflow-x: auto; }
+table.abrechnung { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.abrechnung td { padding: 7px 4px; border-bottom: 1px solid var(--linie); }
+.abrechnung td:last-child { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.abrechnung tr.summe td { font-weight: 600; border-bottom: 2px solid var(--text-leise); }
+.abrechnung tr.gruppe td { padding-top: 18px; font-family: var(--schrift-titel); font-size: 0.85rem; color: var(--akzent); border-bottom: 1px solid var(--akzent); }
+.abrechnung td.ein { padding-left: 18px; color: var(--text-leise); }
+.tipps { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; max-width: 65ch; }
+
+.fuss { max-width: 1240px; margin: 0 auto; padding: 8px 20px 32px; color: var(--text-leise); font-size: 0.85rem; }
+
+dialog {
+  border: 1px solid var(--linie); border-radius: 12px; background: var(--flaeche); color: var(--text);
+  padding: 22px; width: min(520px, calc(100% - 32px));
+}
+dialog[open] { display: flex; flex-direction: column; gap: 12px; }
+dialog::backdrop { background: rgba(5, 15, 18, 0.6); }
+.dialogknoepfe { display: flex; gap: 8px; flex-wrap: wrap; }
+.fehler { color: var(--schlecht); }
+
+@media (max-width: 1000px) {
+  .gitter { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 16px; }
+  .schritte { position: static; flex-direction: row; overflow-x: auto; padding-bottom: 4px; }
+  .schritte a { white-space: nowrap; flex: none; }
+  .ergebnis { position: static; order: -1; }
+  .betrag { font-size: 1.7rem; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .knopf, .schritte a { transition: background-color 0.15s, color 0.15s, border-color 0.15s; }
+}
+
+@media print {
+  body { background: #fff; }
+  .schritte, .aktionen, .weiter, .hinweisband, .ergebnis .knopf { display: none !important; }
+  .kopf { border-bottom: 2px solid var(--text); padding: 0 0 10px; }
+  .gitter { display: flex; flex-direction: column; gap: 14px; padding: 16px 0 0; max-width: none; }
+  .ergebnis { position: static; order: -1; break-inside: avoid; }
+  main { gap: 12px; }
+  .karte, .ergebnis { border-color: #999; }
+  .abrechnung tr { break-inside: avoid; }
+  .fuss { padding: 12px 0 0; }
+}
